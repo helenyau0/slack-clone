@@ -1,13 +1,25 @@
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
+import path from 'path';
+import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 
-import typeDefs from './schema';
-import resolvers from './resolvers';
 import models from './models';
 
-const SERVER = new ApolloServer({
+const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schema')));
+
+const resolvers = mergeResolvers(
+  fileLoader(path.join(__dirname, './resolvers'))
+);
+
+const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: {
+    models,
+    user: {
+      id: 1
+    }
+  },
   playground: {
     endpoint: `http://localhost:3000/graphql`
   }
@@ -15,8 +27,8 @@ const SERVER = new ApolloServer({
 
 const app = express();
 
-SERVER.applyMiddleware({
+server.applyMiddleware({
   app
 });
 
-models.sequelize.sync({}).then(() => app.listen(3000));
+models.sequelize.sync().then(() => app.listen(3000));
