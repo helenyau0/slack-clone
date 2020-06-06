@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/helenyau0/slack-clone#readme",
   "dependencies": {
-    "apollo-server-express": "^2.9.3",
+    "apollo-server-express": "^2.14.2",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-3": "^6.24.1",
